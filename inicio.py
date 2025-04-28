@@ -2,78 +2,85 @@
 
 import streamlit as st
 from datetime import datetime
-from streamlit_extras.switch_page_button import switch_page
 
-# Configurações iniciais da página
+# Configurações da página
 st.set_page_config(page_title="Aurora's Realm: The Enchanted Adventure", layout="wide")
 
-# Informações do jogo
+# Variáveis do jogo
 nome_jogo = "Aurora's Realm: The Enchanted Adventure"
-descricao = """
-<div style="text-align: justify;">
-<strong>Welcome to Aurora's Realm: The Enchanted Adventure!</strong><br><br>
-
-Prepare yourself for an epic journey where magic, courage, and friendship are your greatest weapons.
-In this enchanted world, you will create your own hero, choose unique abilities, explore mysterious realms, 
-and face legendary creatures.<br><br>
-
-<strong>The story begins</strong> in a land forgotten by time, where an ancient prophecy speaks of a chosen one 
-capable of restoring the balance between light and darkness. Your character will be guided by wise masters, face difficult dilemmas,
-and carry the fate of the world in their hands.<br><br>
-
-You will be able to:
-<ul>
-<li>🌍 Explore vast open maps full of secrets.</li>
-<li>🛡️ Forge alliances with magical clans and legendary warriors.</li>
-<li>⚔️ Conquer ancient artifacts to enhance your powers.</li>
-<li>🧙‍♂️ Customize skills and equipment to create your unique strategy.</li>
-<li>📜 Live a story where every decision shapes the future of the world.</li>
-</ul>
-
-<strong>Aurora's Realm</strong> promises a unique experience of immersion, adventure, and emotion!
-</div>
-"""
-
 data_lancamento = datetime(2025, 12, 20)
-
-# Calculando o tempo restante para o lançamento
 hoje = datetime.now()
-tempo_restante = data_lancamento - hoje
-dias_restantes = tempo_restante.days
+dias_restantes = (data_lancamento - hoje).days
 
-# Layout da página
-col1, col2 = st.columns([2, 1])
+# Estilo CSS profissional
+st.markdown("""
+    <style>
+    body {
+        background-color: #0f0f0f;
+    }
+    .container {
+        padding: 20px;
+        background-color: #1a1a1a;
+        border-radius: 15px;
+        box-shadow: 0 0 20px #6c00ff;
+        color: white;
+        font-family: 'Trebuchet MS', sans-serif;
+    }
+    h1, h2, h3 {
+        color: #9f7aea;
+    }
+    .button {
+        background-color: #6c00ff;
+        color: white;
+        padding: 12px 25px;
+        margin: 10px 5px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .button:hover {
+        background-color: #9f7aea;
+    }
+    .footer {
+        text-align: center;
+        font-size: 14px;
+        color: gray;
+        margin-top: 50px;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-with col1:
-    st.title(f"🎮 {nome_jogo}")
-    
-    st.subheader("🌟 About the Game:")
-    st.markdown(descricao, unsafe_allow_html=True)
+# HTML do conteúdo
+st.markdown(f"""
+<div class="container">
+    <h1>🎮 {nome_jogo}</h1>
+    <h3>🌟 About the Game</h3>
+    <p>
+    Welcome to <strong>Aurora's Realm: The Enchanted Adventure</strong>! Prepare for an epic journey where magic, courage, 
+    and friendship are your greatest weapons. Create your hero, master unique skills, and explore a world full of mysteries.<br><br>
 
-    st.subheader("📅 Release Date:")
-    st.write(f"**{data_lancamento.strftime('%B %d, %Y')}**")
+    🧙‍♂️ Train with wise masters.<br>
+    🛡️ Forge alliances and battle legendary creatures.<br>
+    ⚔️ Conquer ancient artifacts to unlock hidden powers.<br>
+    📜 Live an immersive story where every decision changes the fate of the world!
+    </p>
 
-    st.subheader("⏳ Countdown to Launch:")
-    if dias_restantes > 0:
-        st.success(f"🚀 Only **{dias_restantes} days** left for the grand launch!")
-    else:
-        st.warning("🎉 The game has already been launched!")
+    <h3>📅 Release Date:</h3>
+    <p><strong>{data_lancamento.strftime('%B %d, %Y')}</strong></p>
 
-    st.markdown("---")
-    st.info("⚙️ Currently, the game is in its final polishing and adjustments phase. Soon, adventurers from around the world will embark on this magical journey! 🌟")
-    
-with col2:
-    with st.container(border=True):
-        st.write("## 🔐 Quick Access")
-        st.write("---")
-        if st.button("🔑 Login"):
-            switch_page("Login")
-        if st.button("📝 Sign Up"):
-            switch_page("Cadastro")
+    <h3>⏳ Countdown:</h3>
+    <p><strong>{"🚀 Only " + str(dias_restantes) + " days left!" if dias_restantes > 0 else "🎉 The game has been launched!"}</strong></p>
 
-# Rodapé
-st.markdown("---")
-st.markdown(
-    "<p style='text-align: center; color: gray;'>© 2025 Aurora's Realm Studios. All rights reserved.</p>",
-    unsafe_allow_html=True
-)
+    <a href="#" class="button">🔑 Login</a>
+    <a href="#" class="button">📝 Sign Up</a>
+
+</div>
+
+<div class="footer">
+    © 2025 Aurora's Realm Studios. All rights reserved.
+</div>
+""", unsafe_allow_html=True)
