@@ -72,20 +72,23 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# HTML do conteúdo
+# Conteúdo
 st.markdown(f"""
 <div class="container">
     <h1>🎮 {nome_jogo}</h1>
+
     <h3>🌟 About the Game</h3>
     <p>
         Welcome to <strong>Aurora's Realm: The Enchanted Adventure</strong>! Prepare for an epic journey where magic, courage, 
-        and friendship are your greatest weapons. Create your hero, master unique skills, and explore a world full of mysteries.<br><br>
-
-        🧙‍♂️ Train with wise masters.<br>
-        🛡️ Forge alliances and battle legendary creatures.<br>
-        ⚔️ Conquer ancient artifacts to unlock hidden powers.<br>
-        📜 Live an immersive story where every decision changes the fate of the world!
+        and friendship are your greatest weapons. Create your hero, master unique skills, and explore a world full of mysteries.
     </p>
+
+    <ul>
+        <li>🧙‍♂️ Train with wise masters.</li>
+        <li>🛡️ Forge alliances and battle legendary creatures.</li>
+        <li>⚔️ Conquer ancient artifacts to unlock hidden powers.</li>
+        <li>📜 Live an immersive story where every decision changes the fate of the world!</li>
+    </ul>
 
     <h3>📅 Release Date:</h3>
     <p><strong>{data_lancamento.strftime('%B %d, %Y')}</strong></p>
@@ -93,8 +96,10 @@ st.markdown(f"""
     <h3>⏳ Countdown:</h3>
     <p><strong>{"🚀 Only " + str(dias_restantes) + " days left!" if dias_restantes > 0 else "🎉 The game has been launched!"}</strong></p>
 
-    <a href="#" class="button">🔑 Login</a>
-    <a href="#" class="button">📝 Sign Up</a>
+    <div>
+        <a href="#" class="button">🔑 Login</a>
+        <a href="#" class="button">📝 Sign Up</a>
+    </div>
 
     <div class="social-links">
         <h3>🔗 Me Sigam:</h3>
