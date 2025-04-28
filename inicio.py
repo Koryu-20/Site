@@ -2,33 +2,36 @@
 
 import streamlit as st
 from datetime import datetime
+from streamlit_extras.switch_page_button import switch_page
 
 # Configurações iniciais da página
-st.set_page_config(page_title="Fantasy World: A Jornada Mágica", layout="wide")
+st.set_page_config(page_title="Aurora's Realm: The Enchanted Adventure", layout="wide")
 
 # Informações do jogo
-nome_jogo = "Fantasy World: A Jornada Mágica"
+nome_jogo = "Aurora's Realm: The Enchanted Adventure"
 descricao = """
-**Bem-vindo a Fantasy World: A Jornada Mágica!**
+<div style="text-align: justify;">
+<strong>Welcome to Aurora's Realm: The Enchanted Adventure!</strong><br><br>
 
-Prepare-se para embarcar em uma aventura épica onde a magia, a coragem e a amizade serão suas maiores armas.
-Neste mundo encantado, você criará seu próprio herói, escolherá habilidades únicas, explorará reinos misteriosos 
-e enfrentará criaturas lendárias.
+Prepare yourself for an epic journey where magic, courage, and friendship are your greatest weapons.
+In this enchanted world, you will create your own hero, choose unique abilities, explore mysterious realms, 
+and face legendary creatures.<br><br>
 
-**A história começa** em uma terra esquecida pelo tempo, onde uma antiga profecia fala sobre um escolhido
-capaz de restaurar o equilíbrio entre a luz e a escuridão. Seu personagem será guiado por mestres sábios, enfrentará dilemas difíceis,
-e terá o destino do mundo em suas mãos.
+<strong>The story begins</strong> in a land forgotten by time, where an ancient prophecy speaks of a chosen one 
+capable of restoring the balance between light and darkness. Your character will be guided by wise masters, face difficult dilemmas,
+and carry the fate of the world in their hands.<br><br>
 
-Você poderá:
-- Explorar vastos mapas abertos cheios de segredos.
-- Forjar alianças com clãs mágicos e guerreiros lendários.
-- Conquistar artefatos antigos para aumentar seus poderes.
-- Personalizar habilidades e equipamentos para criar sua estratégia única.
-- Viver uma história onde cada decisão molda o futuro do mundo.
+You will be able to:
+<ul>
+<li>🌍 Explore vast open maps full of secrets.</li>
+<li>🛡️ Forge alliances with magical clans and legendary warriors.</li>
+<li>⚔️ Conquer ancient artifacts to enhance your powers.</li>
+<li>🧙‍♂️ Customize skills and equipment to create your unique strategy.</li>
+<li>📜 Live a story where every decision shapes the future of the world.</li>
+</ul>
 
-**Fantasy World** promete trazer uma experiência única de imersão, aventura e emoção!
-
----
+<strong>Aurora's Realm</strong> promises a unique experience of immersion, adventure, and emotion!
+</div>
 """
 
 data_lancamento = datetime(2025, 12, 20)
@@ -44,32 +47,33 @@ col1, col2 = st.columns([2, 1])
 with col1:
     st.title(f"🎮 {nome_jogo}")
     
-    st.subheader("🌟 Sobre o jogo:")
-    st.markdown(descricao)
+    st.subheader("🌟 About the Game:")
+    st.markdown(descricao, unsafe_allow_html=True)
 
-    st.subheader("📅 Data de Lançamento:")
-    st.write(f"**{data_lancamento.strftime('%d/%m/%Y')}**")
+    st.subheader("📅 Release Date:")
+    st.write(f"**{data_lancamento.strftime('%B %d, %Y')}**")
 
-    st.subheader("⏳ Tempo até o lançamento:")
+    st.subheader("⏳ Countdown to Launch:")
     if dias_restantes > 0:
-        st.success(f"🚀 Faltam **{dias_restantes} dias** para o grande lançamento!")
+        st.success(f"🚀 Only **{dias_restantes} days** left for the grand launch!")
     else:
-        st.warning("O jogo já foi lançado!")
+        st.warning("🎉 The game has already been launched!")
 
     st.markdown("---")
-    st.info("⚙️ No momento, o jogo está em fase de manutenção e ajustes finais. Acreditamos que, em breve, ele será lançado para todos os aventureiros!")
+    st.info("⚙️ Currently, the game is in its final polishing and adjustments phase. Soon, adventurers from around the world will embark on this magical journey! 🌟")
     
 with col2:
-    st.write("## 🔐 Acesso Rápido")
-    st.write("---")
-    if st.button("🔑 Login"):
-        st.switch_page("Login.py")
-    if st.button("📝 Cadastro"):
-        st.switch_page("Cadastro.py")
+    with st.container(border=True):
+        st.write("## 🔐 Quick Access")
+        st.write("---")
+        if st.button("🔑 Login"):
+            switch_page("Login")
+        if st.button("📝 Sign Up"):
+            switch_page("Cadastro")
 
 # Rodapé
 st.markdown("---")
 st.markdown(
-    "<p style='text-align: center;'>© 2025 Fantasy World Studios. Todos os direitos reservados.</p>",
+    "<p style='text-align: center; color: gray;'>© 2025 Aurora's Realm Studios. All rights reserved.</p>",
     unsafe_allow_html=True
 )
