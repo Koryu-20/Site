@@ -1,25 +1,45 @@
 import streamlit as st
+import pandas as pd
+from io import BytesIO
+import smtplib
+from email.message import EmailMessage
 
-# Configurações da página
+# Função para envio de e-mail com o Excel em anexo
+def enviar_email_com_anexo(email_destino, assunto, corpo, arquivo):
+    msg = EmailMessage()
+    msg['Subject'] = assunto
+    msg['From'] = 'tuguitosmartins@gmail.com'
+    msg['To'] = email_destino
+    msg.set_content(corpo)
+
+    msg.add_attachment(arquivo, maintype='application', subtype='octet-stream', filename="cadastro_jovens.xlsx")
+
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login('tuguitosmartins@gmail.com', 'vgmu rdva ysaw iytt')  # Substitua por sua App Password
+            server.send_message(msg)
+        st.success("✅ E-mail enviado com sucesso!")
+    except Exception as e:
+        st.error(f"❌ Erro ao enviar e-mail: {e}")
+
+# Configuração da página
 st.set_page_config(page_title="Cadastro Jovens e Menores - CCB", layout="centered")
 
-# CSS ajustado para imagem menor e mais suave
+# CSS com imagem de fundo grande e suave
 st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8s0MG4WMMrRWvrodkdk8afUF_7v6YtSAOiw&s");
-        background-size: 30%;  /* Tamanho reduzido da imagem */
-        background-repeat: repeat;
+        background: url("https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png") no-repeat center top;
+        background-size: cover;
         background-attachment: fixed;
-        background-position: top center;
-        filter: brightness(0.9);  /* Deixa o fundo mais suave */
+        background-color: white;
     }
     .block-container {
-        background-color: rgba(255, 255, 255, 0.93);
+        background-color: rgba(255, 255, 255, 0.94);
         padding: 2rem;
         border-radius: 15px;
-        max-width: 800px;
+        max-width: 850px;
         margin: auto;
     }
     </style>
@@ -27,10 +47,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Logo da CCB
+# Logo e título
 st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Congregacao_Crista_no_Brasil.svg/1200px-Congregacao_Crista_no_Brasil.svg.png", width=150)
-
-# Título
 st.title("Cadastro de Participação da Reunião de Jovens e Menores - Jd. São Pedro")
 
 # Formulário
@@ -73,7 +91,36 @@ with st.form("cadastro_form"):
     with col11:
         escola = st.text_input("Escola")
 
+    st.subheader("Confirmação de envio")
+    email_destino = st.text_input("Seu e-mail para receber o cadastro:")
+
     enviar = st.form_submit_button("Enviar Cadastro")
 
     if enviar:
-        st.success("✅ Cadastro enviado com sucesso!")
+        dados = {
+            "Nome": [nome],
+            "Idade": [idade],
+            "Data de Nascimento": [data_nascimento],
+            "Batizado": [batizado],
+            "Data Batismo": [data_batismo if batizado == "Sim" else ""],
+            "Música": [musica],
+            "Nome Responsáveis": [nome_responsaveis],
+            "Parentesco": [grau_parentesco],
+            "Responsável Batizado": [responsavel_batizado],
+            "Telefones": [telefones],
+            "Endereço": [endereco],
+            "Estuda": [estuda],
+            "Série": [serie],
+            "Escola": [escola],
+        }
+
+        df = pd.DataFrame(dados)
+
+        # Gerar Excel em memória
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False, sheet_name="Cadastro Jovens")
+        output.seek(0)
+
+        corpo = "Segue em anexo o cadastro enviado da Reunião de Jovens e Menores."
+        enviar_email_com_anexo(email_destino, "Cadastro Jovens e Menores - CCB", corpo, output.getvalue())
