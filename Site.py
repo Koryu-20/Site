@@ -5,7 +5,7 @@ import smtplib
 from email.message import EmailMessage
 
 # Configuração da página
-st.set_page_config(page_title="Cartão de Visita - CCB", layout="centered")
+st.set_page_config(page_title="Cartão de Visita - CCB", layout="wide")
 
 background_image_url = "https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png"
 
