@@ -3,20 +3,18 @@ import streamlit as st
 # Configuração da página
 st.set_page_config(page_title="Cartão de Visita - CCB", layout="centered")
 
-# Caminho RAW da imagem do GitHub
+# Caminho RAW da imagem no GitHub
 background_image_url = "https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png"
 
-# Estilo atualizado para não cortar a imagem
+# Estilo atualizado para preencher a largura e controlar a altura
 st.markdown(
     f"""
     <style>
     .stApp {{
-        background-image: url("{background_image_url}");
-        background-size: contain;
-        background-repeat: no-repeat;
+        background: url("{background_image_url}") no-repeat center top;
+        background-size: 100% auto; /* largura 100%, altura automática */
         background-attachment: fixed;
-        background-position: center;
-        background-color: white; /* fundo branco atrás da imagem */
+        background-color: white;
     }}
     .block-container {{
         background-color: rgba(255, 255, 255, 0.94);
