@@ -6,13 +6,13 @@ st.set_page_config(page_title="Cartão de Visita - CCB", layout="centered")
 # Caminho RAW da imagem no GitHub
 background_image_url = "https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png"
 
-# Estilo atualizado para ajustar a altura ligeiramente
+# Estilo atualizado para aumentar mais um pouco a altura
 st.markdown(
     f"""
     <style>
     .stApp {{
         background: url("{background_image_url}") no-repeat center top;
-        background-size: 100% 85%; /* Largura 100%, altura ligeiramente aumentada para 85% */
+        background-size: 100% 90%; /* Largura 100%, altura aumentada para 90% */
         background-attachment: fixed;
         background-color: white;
     }}
