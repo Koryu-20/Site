@@ -16,7 +16,7 @@ def enviar_email_com_anexo(email_destino, assunto, corpo, arquivo):
 
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-            server.login('tuguitosmartins@gmail.com', 'vgmu rdva ysaw iytt')  # Substitua por sua App Password
+            server.login('tuguitosmartins@gmail.com', 'fxaz lnme fcos ofdi')  # Substitua por sua App Password
             server.send_message(msg)
         st.success("✅ E-mail enviado com sucesso!")
     except Exception as e:
