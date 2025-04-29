@@ -3,25 +3,27 @@ import streamlit as st
 # Configuração da página
 st.set_page_config(page_title="Cartão de Visita - CCB", layout="centered")
 
-# Estilo com imagem de fundo e container com fundo branco translúcido
+# Caminho RAW da imagem do GitHub
+background_image_url = "https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png"
+
+# Estilo com imagem de fundo do GitHub
 st.markdown(
-    """
+    f"""
     <style>
-    .stApp {
-        background-image: url("CCB.png");
+    .stApp {{
+        background-image: url("{background_image_url}");
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
-    }
-
-    .block-container {
+    }}
+    .block-container {{
         background-color: rgba(255, 255, 255, 0.94);
         padding: 2rem;
         border-radius: 15px;
         max-width: 850px;
         margin: auto;
-    }
+    }}
     </style>
     """,
     unsafe_allow_html=True
