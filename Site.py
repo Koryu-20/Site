@@ -12,7 +12,7 @@ st.markdown(
     <style>
     .stApp {{
         background: url("{background_image_url}") no-repeat center top;
-        background-size: 100% 90%; /* Largura 100%, altura aumentada para 90% */
+        background-size: 100% 95%; /* Largura 100%, altura aumentada para 95% */
         background-attachment: fixed;
         background-color: white;
     }}
