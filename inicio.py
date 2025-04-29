@@ -25,12 +25,12 @@ def enviar_email_com_anexo(email_destino, assunto, corpo, arquivo):
 # Configuração da página
 st.set_page_config(page_title="Cadastro Jovens e Menores - CCB", layout="centered")
 
-# CSS com imagem de fundo grande e suave
+# CSS com imagem de fundo atualizada e forçando recarregamento com parâmetro "nocache"
 st.markdown(
     """
     <style>
     .stApp {
-        background: url("https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png") no-repeat center top;
+        background: url("https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png?nocache=2") no-repeat center top;
         background-size: cover;
         background-attachment: fixed;
         background-color: white;
