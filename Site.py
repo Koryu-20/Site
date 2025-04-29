@@ -4,37 +4,38 @@ from io import BytesIO
 import smtplib
 from email.message import EmailMessage
 
-# Função para enviar e-mail com anexo
+# Função para envio de e-mail com o Excel em anexo
 def enviar_email_com_anexo(email_destino, assunto, corpo, arquivo):
     msg = EmailMessage()
     msg['Subject'] = assunto
-    msg['From'] = 'tuguitosmartins@gmail.com'  # Altere para seu e-mail
+    msg['From'] = 'tuguitosmartins@gmail.com'
     msg['To'] = email_destino
     msg.set_content(corpo)
 
-    # Anexando o arquivo Excel gerado
-    msg.add_attachment(arquivo, maintype='application', subtype='octet-stream', filename="cartao_visita.xlsx")
+    msg.add_attachment(arquivo, maintype='application', subtype='octet-stream', filename="cadastro_jovens.xlsx")
 
-    # Enviar o e-mail via SMTP
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-            server.login('tuguitosmartins@gmail.com', 'vgmu rdva ysaw iytt')  # Use a senha ou App Password aqui
+            server.login('tuguitosmartins@gmail.com', 'fxaz lnme fcos ofdi')  # Substitua por sua App Password
             server.send_message(msg)
         st.success("✅ E-mail enviado com sucesso!")
     except Exception as e:
-        st.error(f"❌ Ocorreu um erro ao enviar o e-mail: {e}")
+        st.error(f"❌ Erro ao enviar e-mail: {e}")
 
 # Configuração da página
-st.set_page_config(page_title="Cartão de Visita - CCB", layout="wide")
+st.set_page_config(page_title="Cadastro Jovens e Menores - CCB", layout="centered")
 
+# URL da imagem de fundo
 background_image_url = "https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png"
+background_size_percentage = "100%"
 
+# CSS com imagem de fundo
 st.markdown(
     f"""
     <style>
     .stApp {{
         background: url("{background_image_url}") no-repeat center top;
-        background-size: 100% 100%;
+        background-size: {background_size_percentage} {background_size_percentage};
         background-attachment: fixed;
         background-color: white;
     }}
@@ -50,85 +51,81 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.title("Cartão de Visita - Reuniões e Visitas")
+# Logo e título
+st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Congregacao_Crista_no_Brasil.svg/1200px-Congregacao_Crista_no_Brasil.svg.png", width=150)
+st.title("Cadastro de Participação da Reunião de Jovens e Menores - Jd. São Pedro")
 
-with st.form("formulario_visita"):
-    col1, col2 = st.columns(2)
-
+# Formulário
+with st.form("cadastro_form"):
+    st.subheader("Dados Pessoais")
+    nome = st.text_input("Nome")
+    col1, col2, col3 = st.columns(3)
     with col1:
-        nome_irmao = st.text_input("Nome do irmão:")
-        telefone = st.text_input("Telefone:")
-        logradouro = st.text_input("Logradouro:")
-        cep = st.text_input("CEP:")
-        bairro = st.text_input("Bairro:")
-        cidade = st.text_input("Cidade:")
-
+        idade = st.number_input("Idade", min_value=0, max_value=100, step=1)
     with col2:
-        nome_irma = st.text_input("Nome da irmã:")
-        comum = st.text_input("Comum Congregação:")
-        complemento = st.text_input("Complemento:")
-        numero = st.text_input("Nº:")
-        estado = st.text_input("Estado:")
-        batizado_irmao = st.radio("Batizado (irmão):", ["Sim", "Não"], horizontal=True)
-        data_batismo_irmao = st.date_input("Data Batismo (irmão):")
-        batizado_irma = st.radio("Batizado (irmã):", ["Sim", "Não"], horizontal=True)
-        data_batismo_irma = st.date_input("Data Batismo (irmã):")
-
-    st.markdown("### Tipo de Visita:")
-    visita_gvi = st.checkbox("GVI - Grupo de Visitas Entre a Irmandade")
-    visita_gvm = st.checkbox("GVM - Grupo de Visitas com a Mocidade")
-    visita_rf = st.checkbox("RF - Reunião Familiar")
-    visita_re = st.checkbox("RE - Reunião de Evangelização")
-
-    col3, col4 = st.columns(2)
+        data_nascimento = st.date_input("Data de Nascimento")
     with col3:
-        filhos = st.radio("Filhos:", ["Sim", "Não"], horizontal=True)
+        batizado = st.selectbox("É Batizado?", ["Sim", "Não"])
+
+    col4, col5 = st.columns(2)
     with col4:
-        qtde_filhos = st.number_input("Qtde:", min_value=0, step=1)
+        data_batismo = st.date_input("Data do Batismo", disabled=(batizado == "Não"))
+    with col5:
+        musica = st.selectbox("É Músico/Organista/Estudando Música?", ["Sim", "Não"])
 
-    atendimento = st.text_input("Atendimento:")
-    data_atendimento = st.date_input("Data:")
+    st.subheader("Responsáveis")
+    nome_responsaveis = st.text_input("Nome dos Responsáveis")
+    col6, col7, col8 = st.columns(3)
+    with col6:
+        grau_parentesco = st.text_input("Grau de Parentesco")
+    with col7:
+        responsavel_batizado = st.selectbox("Responsável é Batizado?", ["Sim", "Não"])
+    with col8:
+        telefones = st.text_input("Telefones para Contato")
 
-    observacoes = st.text_area("Obs.:")
+    st.subheader("Endereço")
+    endereco = st.text_area("Endereço Residencial")
 
-    enviar = st.form_submit_button("Enviar Cartão")
+    st.subheader("Informações Escolares")
+    col9, col10, col11 = st.columns(3)
+    with col9:
+        estuda = st.selectbox("A criança/moço(a) estuda?", ["Sim", "Não"])
+    with col10:
+        serie = st.text_input("Qual série?")
+    with col11:
+        escola = st.text_input("Escola")
+
+    st.subheader("Confirmação de envio")
+    email_participante = st.text_input("Seu e-mail (apenas como referência no cadastro):")
+
+    enviar = st.form_submit_button("Enviar Cadastro")
 
     if enviar:
-        # Monta o DataFrame
-        data = {
-            "Nome do Irmão": [nome_irmao],
-            "Telefone": [telefone],
-            "Logradouro": [logradouro],
-            "CEP": [cep],
-            "Bairro": [bairro],
-            "Cidade": [cidade],
-            "Nome da Irmã": [nome_irma],
-            "Comum Congregação": [comum],
-            "Complemento": [complemento],
-            "Número": [numero],
-            "Estado": [estado],
-            "Batizado Irmão": [batizado_irmao],
-            "Data Batismo Irmão": [data_batismo_irmao],
-            "Batizado Irmã": [batizado_irma],
-            "Data Batismo Irmã": [data_batismo_irma],
-            "Visita GVI": [visita_gvi],
-            "Visita GVM": [visita_gvm],
-            "Visita RF": [visita_rf],
-            "Visita RE": [visita_re],
-            "Filhos": [filhos],
-            "Quantidade de Filhos": [qtde_filhos],
-            "Atendimento": [atendimento],
-            "Data Atendimento": [data_atendimento],
-            "Observações": [observacoes]
+        dados = {
+            "Nome": [nome],
+            "Idade": [idade],
+            "Data de Nascimento": [data_nascimento],
+            "Batizado": [batizado],
+            "Data Batismo": [data_batismo if batizado == "Sim" else ""],
+            "Música": [musica],
+            "Nome Responsáveis": [nome_responsaveis],
+            "Parentesco": [grau_parentesco],
+            "Responsável Batizado": [responsavel_batizado],
+            "Telefones": [telefones],
+            "Endereço": [endereco],
+            "Estuda": [estuda],
+            "Série": [serie],
+            "Escola": [escola],
+            "Email do Participante": [email_participante],
         }
-        df = pd.DataFrame(data)
 
-        # Salva em memória
+        df = pd.DataFrame(dados)
+
+        # Gerar Excel em memória
         output = BytesIO()
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-            df.to_excel(writer, index=False, sheet_name='Cartão de Visita')
+            df.to_excel(writer, index=False, sheet_name="Cadastro Jovens")
         output.seek(0)
 
-        # Enviar e-mail
-        corpo_email = "Segue em anexo o Cartão de Visita solicitado."
-        enviar_email_com_anexo('tuguitosmartins@gmail.com', 'Cartão de Visita - CCB', corpo_email, output.getvalue())
+        corpo = f"Cadastro recebido de: {email_participante}\n\nSegue em anexo o cadastro enviado da Reunião de Jovens e Menores."
+        enviar_email_com_anexo("tuguitosmartins@gmail.com", "Cadastro Jovens e Menores - CCB", corpo, output.getvalue())
