@@ -29,7 +29,7 @@ st.set_page_config(page_title="Cadastro Jovens e Menores - CCB", layout="centere
 background_image_url = "https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png"
 
 # Porcentagem ajustável da imagem de fundo
-background_size_percentage = "95%"
+background_size_percentage = "85%"
 
 # CSS com imagem de fundo por porcentagem
 st.markdown(
