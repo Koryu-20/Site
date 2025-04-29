@@ -1,4 +1,12 @@
 import streamlit as st
+import pandas as pd
+import datetime
+import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
 
 # Configuração da página
 st.set_page_config(page_title="Cartão de Visita - CCB", layout="centered")
@@ -6,13 +14,13 @@ st.set_page_config(page_title="Cartão de Visita - CCB", layout="centered")
 # Caminho RAW da imagem no GitHub
 background_image_url = "https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png"
 
-# Estilo atualizado para aumentar mais um pouco a altura
+# Estilo
 st.markdown(
     f"""
     <style>
     .stApp {{
         background: url("{background_image_url}") no-repeat center top;
-        background-size: 100% 100%; /* Largura 100%, altura aumentada para 100% */
+        background-size: 100% 100%;
         background-attachment: fixed;
         background-color: white;
     }}
@@ -28,6 +36,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# Formulário
 st.title("Cartão de Visita - Reuniões e Visitas")
 
 with st.form("formulario_visita"):
@@ -72,4 +81,74 @@ with st.form("formulario_visita"):
     enviar = st.form_submit_button("Enviar Cartão")
 
     if enviar:
-        st.success("✅ Cartão de Visita enviado com sucesso!")
+        # ----------------- Criar DataFrame e Excel ----------------- #
+        dados = {
+            "Nome Irmão": [nome_irmao],
+            "Telefone": [telefone],
+            "Logradouro": [logradouro],
+            "CEP": [cep],
+            "Bairro": [bairro],
+            "Cidade": [cidade],
+            "Nome Irmã": [nome_irma],
+            "Comum": [comum],
+            "Complemento": [complemento],
+            "Número": [numero],
+            "Estado": [estado],
+            "Batizado Irmão": [batizado_irmao],
+            "Data Batismo Irmão": [data_batismo_irmao.strftime("%d/%m/%Y")],
+            "Batizado Irmã": [batizado_irma],
+            "Data Batismo Irmã": [data_batismo_irma.strftime("%d/%m/%Y")],
+            "Visita GVI": [visita_gvi],
+            "Visita GVM": [visita_gvm],
+            "Visita RF": [visita_rf],
+            "Visita RE": [visita_re],
+            "Filhos": [filhos],
+            "Quantidade Filhos": [qtde_filhos],
+            "Atendimento": [atendimento],
+            "Data Atendimento": [data_atendimento.strftime("%d/%m/%Y")],
+            "Observações": [observacoes]
+        }
+
+        df = pd.DataFrame(dados)
+
+        # Nome do arquivo
+        data_atual = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        nome_arquivo = f"cartao_visita_{data_atual}.xlsx"
+        df.to_excel(nome_arquivo, index=False)
+
+        # ----------------- Upload para Google Drive ----------------- #
+        gauth = GoogleAuth()
+        gauth.LocalWebserverAuth()
+        drive = GoogleDrive(gauth)
+
+        pasta_id = "1F7SGlWDjUTQEmG0tS_gZMAkPJzHxragq"  # Sua pasta
+
+        file_drive = drive.CreateFile({'title': nome_arquivo, 'parents': [{'id': pasta_id}]})
+        file_drive.SetContentFile(nome_arquivo)
+        file_drive.Upload()
+
+        # ----------------- Enviar E-mail ----------------- #
+        remetente = "tuguitosmartins@gmail.com"  # Troque para seu Gmail
+        senha = "04082004VDBr"          # Senha de App do Gmail
+        destinatario = "tuguitosmartins@gmail.com"  # Você mesmo (pode trocar)
+
+        msg = MIMEMultipart()
+        msg['From'] = remetente
+        msg['To'] = destinatario
+        msg['Subject'] = "Novo Cartão de Visita Registrado"
+        body = f"Foi registrado um novo cartão de visita em {data_atual}."
+        msg.attach(MIMEText(body, 'plain'))
+
+        try:
+            servidor = smtplib.SMTP('smtp.gmail.com', 587)
+            servidor.starttls()
+            servidor.login(remetente, senha)
+            servidor.send_message(msg)
+            servidor.quit()
+            st.success("✅ Cartão de Visita enviado, salvo no Drive e e-mail enviado!")
+        except Exception as e:
+            st.error(f"❌ Falha ao enviar e-mail: {e}")
+
+        # Remove o arquivo local depois de upload (limpeza)
+        if os.path.exists(nome_arquivo):
+            os.remove(nome_arquivo)
