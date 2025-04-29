@@ -27,11 +27,9 @@ st.set_page_config(page_title="Cadastro Jovens e Menores - CCB", layout="centere
 
 # URL da imagem de fundo
 background_image_url = "https://raw.githubusercontent.com/Koryu-20/Site/main/CCB.png"
-
-# Porcentagem ajustável da imagem de fundo
 background_size_percentage = "100%"
 
-# CSS com imagem de fundo por porcentagem
+# CSS com imagem de fundo
 st.markdown(
     f"""
     <style>
@@ -98,7 +96,7 @@ with st.form("cadastro_form"):
         escola = st.text_input("Escola")
 
     st.subheader("Confirmação de envio")
-    email_destino = st.text_input("Seu e-mail para receber o cadastro:")
+    email_participante = st.text_input("Seu e-mail (apenas como referência no cadastro):")
 
     enviar = st.form_submit_button("Enviar Cadastro")
 
@@ -118,6 +116,7 @@ with st.form("cadastro_form"):
             "Estuda": [estuda],
             "Série": [serie],
             "Escola": [escola],
+            "Email do Participante": [email_participante],
         }
 
         df = pd.DataFrame(dados)
@@ -128,5 +127,5 @@ with st.form("cadastro_form"):
             df.to_excel(writer, index=False, sheet_name="Cadastro Jovens")
         output.seek(0)
 
-        corpo = "Segue em anexo o cadastro enviado da Reunião de Jovens e Menores."
-        enviar_email_com_anexo(email_destino, "Cadastro Jovens e Menores - CCB", corpo, output.getvalue())
+        corpo = f"Cadastro recebido de: {email_participante}\n\nSegue em anexo o cadastro enviado da Reunião de Jovens e Menores."
+        enviar_email_com_anexo("tuguitosmartins@gmail.com", "Cadastro Jovens e Menores - CCB", corpo, output.getvalue())
