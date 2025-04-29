@@ -1,46 +1,51 @@
 import streamlit as st
-from datetime import datetime
 
-st.set_page_config(page_title="Aurora's Realm: The Enchanted Adventure", layout="wide")
+st.set_page_config(page_title="Cadastro de Jovens e Menores - CCB", layout="centered")
 
-# Variáveis
-nome_jogo = "Aurora's Realm: The Enchanted Adventure"
-data_lancamento = datetime(2025, 12, 20)
-dias_restantes = (data_lancamento - datetime.now()).days
+st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Congregacao_Crista_no_Brasil.svg/1200px-Congregacao_Crista_no_Brasil.svg.png", width=150)
 
-# Conteúdo
-st.title(f"🎮 {nome_jogo}")
+st.title("Cadastro de Participação da Reunião de Jovens e Menores - Jd. São Pedro")
 
-st.header("🌟 About the Game")
-st.write("""
-Welcome to **Aurora's Realm: The Enchanted Adventure**! Prepare for an epic journey where magic, courage, 
-and friendship are your greatest weapons. Create your hero, master unique skills, and explore a world full of mysteries.
+with st.form("cadastro_form"):
+    st.header("Dados Pessoais")
+    nome = st.text_input("Nome")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        idade = st.number_input("Idade", min_value=0, max_value=100, step=1)
+    with col2:
+        data_nascimento = st.date_input("Data de Nascimento")
+    with col3:
+        batizado = st.selectbox("É Batizado?", ["Sim", "Não"])
+    
+    col4, col5 = st.columns(2)
+    with col4:
+        data_batismo = st.date_input("Data do Batismo", disabled=(batizado == "Não"))
+    with col5:
+        musica = st.selectbox("É Músico/Organista/Estudando Música?", ["Sim", "Não"])
 
-🧙‍♂️ Train with wise masters  
-🛡️ Forge alliances and battle legendary creatures  
-⚔️ Conquer ancient artifacts to unlock hidden powers  
-📜 Live an immersive story where every decision changes the fate of the world!
-""")
+    st.header("Responsáveis")
+    nome_responsaveis = st.text_input("Nome dos Responsáveis")
+    col6, col7, col8 = st.columns(3)
+    with col6:
+        grau_parentesco = st.text_input("Grau de Parentesco")
+    with col7:
+        responsavel_batizado = st.selectbox("Responsável é Batizado?", ["Sim", "Não"])
+    with col8:
+        telefones = st.text_input("Telefones para Contato")
+    
+    st.header("Endereço")
+    endereco = st.text_area("Endereço Residencial")
 
-st.header("📅 Release Date")
-st.write("**December 20, 2025**")
+    st.header("Informações Escolares")
+    col9, col10, col11 = st.columns(3)
+    with col9:
+        estuda = st.selectbox("A criança/moço(a) estuda?", ["Sim", "Não"])
+    with col10:
+        serie = st.text_input("Qual série?")
+    with col11:
+        escola = st.text_input("Escola")
 
-st.header("⏳ Countdown")
-st.write(f"**🚀 Only {dias_restantes} days left!**")
+    enviar = st.form_submit_button("Enviar Cadastro")
 
-# Botões de ação
-col1, col2 = st.columns(2)
-with col1:
-    st.button("🔑 Login")
-with col2:
-    st.button("📝 Sign Up")
-
-# Redes sociais
-st.header("🔗 Me Sigam")
-st.markdown("[YouTube](https://www.youtube.com/)")
-st.markdown("[Facebook](https://www.facebook.com/)")
-st.markdown("[Instagram](https://www.instagram.com/)")
-
-# Rodapé
-st.markdown("---")
-st.caption("© 2025 Aurora's Realm Studios. All rights reserved.")
+    if enviar:
+        st.success("Cadastro enviado com sucesso!")
