@@ -4,6 +4,26 @@ from io import BytesIO
 import smtplib
 from email.message import EmailMessage
 
+# Função para enviar e-mail com anexo
+def enviar_email_com_anexo(email_destino, assunto, corpo, arquivo):
+    msg = EmailMessage()
+    msg['Subject'] = assunto
+    msg['From'] = 'tuguitosmartins@gmail.com'  # Altere para seu e-mail
+    msg['To'] = email_destino
+    msg.set_content(corpo)
+
+    # Anexando o arquivo Excel gerado
+    msg.add_attachment(arquivo, maintype='application', subtype='octet-stream', filename="cartao_visita.xlsx")
+
+    # Enviar o e-mail via SMTP
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login('tuguitosmartins@gmail.com', '04082004VDBr')  # Use a senha ou App Password aqui
+            server.send_message(msg)
+        st.success("✅ E-mail enviado com sucesso!")
+    except Exception as e:
+        st.error(f"❌ Ocorreu um erro ao enviar o e-mail: {e}")
+
 # Configuração da página
 st.set_page_config(page_title="Cartão de Visita - CCB", layout="wide")
 
@@ -109,38 +129,6 @@ with st.form("formulario_visita"):
             df.to_excel(writer, index=False, sheet_name='Cartão de Visita')
         output.seek(0)
 
-        # Botão de download
-        st.success("✅ Cartão de Visita enviado com sucesso!")
-        st.download_button(
-            label="📥 Baixar Excel",
-            data=output,
-            file_name="cartao_visita.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
-
-        # ENVIAR POR E-MAIL
-        destinatario = "tuguitosmartins@gmail.com"  # <-- Substitua por seu e-mail
-        remetente = "tuguitosmartins@gmail.com"    # <-- Deve ser o mesmo do login abaixo
-        senha_app = "04082004VDBr"           # <-- Substitua pela senha de app do Gmail
-
-        # Monta o e-mail
-        msg = EmailMessage()
-        msg['Subject'] = "Cartão de Visita - Reuniões e Visitas"
-        msg['From'] = remetente
-        msg['To'] = destinatario
-        msg.set_content("Segue em anexo o Cartão de Visita preenchido.")
-
-        # Adiciona o anexo (Excel)
-        msg.add_attachment(output.read(),
-                           maintype='application',
-                           subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                           filename='cartao_visita.xlsx')
-
-        # Envia o e-mail
-        try:
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-                smtp.login(remetente, senha_app)
-                smtp.send_message(msg)
-            st.success("📧 Cartão de Visita enviado para seu e-mail com sucesso!")
-        except Exception as e:
-            st.error(f"❌ Erro ao enviar e-mail: {e}")
+        # Enviar e-mail
+        corpo_email = "Segue em anexo o Cartão de Visita solicitado."
+        enviar_email_com_anexo('tuguitosmartins@gmail.com', 'Cartão de Visita - CCB', corpo_email, output.getvalue())
