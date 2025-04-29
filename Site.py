@@ -117,3 +117,30 @@ with st.form("formulario_visita"):
             file_name="cartao_visita.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
+        # ENVIAR POR E-MAIL
+        destinatario = "tuguitosmartins@gmail.com"  # <-- Substitua por seu e-mail
+        remetente = "tuguitosmartins@gmail.com"    # <-- Deve ser o mesmo do login abaixo
+        senha_app = "04082004VDBr"           # <-- Substitua pela senha de app do Gmail
+
+        # Monta o e-mail
+        msg = EmailMessage()
+        msg['Subject'] = "Cartão de Visita - Reuniões e Visitas"
+        msg['From'] = remetente
+        msg['To'] = destinatario
+        msg.set_content("Segue em anexo o Cartão de Visita preenchido.")
+
+        # Adiciona o anexo (Excel)
+        msg.add_attachment(output.read(),
+                           maintype='application',
+                           subtype='vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                           filename='cartao_visita.xlsx')
+
+        # Envia o e-mail
+        try:
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+                smtp.login(remetente, senha_app)
+                smtp.send_message(msg)
+            st.success("📧 Cartão de Visita enviado para seu e-mail com sucesso!")
+        except Exception as e:
+            st.error(f"❌ Erro ao enviar e-mail: {e}")
