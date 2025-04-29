@@ -3,10 +3,18 @@ import streamlit as st
 # Configuração da página
 st.set_page_config(page_title="Cartão de Visita - CCB", layout="centered")
 
-# Estilização opcional (leve fundo branco translúcido para facilitar leitura)
+# Estilo com imagem de fundo e container com fundo branco translúcido
 st.markdown(
     """
     <style>
+    .stApp {
+        background-image: url("CCB.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+    }
+
     .block-container {
         background-color: rgba(255, 255, 255, 0.94);
         padding: 2rem;
