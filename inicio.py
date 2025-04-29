@@ -1,25 +1,27 @@
 import streamlit as st
 
-# Configurações iniciais da página
+# Configurações da página
 st.set_page_config(page_title="Cadastro Jovens e Menores - CCB", layout="centered")
 
-# CSS para fundo com a imagem fornecida
+# CSS ajustado para imagem menor e mais suave
 st.markdown(
-    f"""
+    """
     <style>
-    .stApp {{
+    .stApp {
         background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8s0MG4WMMrRWvrodkdk8afUF_7v6YtSAOiw&s");
-        background-size: cover;
-        background-repeat: no-repeat;
+        background-size: 30%;  /* Tamanho reduzido da imagem */
+        background-repeat: repeat;
         background-attachment: fixed;
-    }}
-    .block-container {{
-        background-color: rgba(255, 255, 255, 0.88);
+        background-position: top center;
+        filter: brightness(0.9);  /* Deixa o fundo mais suave */
+    }
+    .block-container {
+        background-color: rgba(255, 255, 255, 0.93);
         padding: 2rem;
         border-radius: 15px;
         max-width: 800px;
         margin: auto;
-    }}
+    }
     </style>
     """,
     unsafe_allow_html=True
