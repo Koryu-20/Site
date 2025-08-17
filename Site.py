@@ -22,6 +22,19 @@ def enviar_email_com_anexo(email_destino, assunto, corpo, arquivo):
     except Exception as e:
         st.error(f"❌ Erro ao enviar e-mail: {e}")
 
+# Função para reiniciar o site automaticamente
+def reiniciar_site(segundos=3):
+    st.markdown(
+        f"""
+        <script>
+        setTimeout(function(){{
+            window.location.reload();
+        }}, {segundos*1000});
+        </script>
+        """,
+        unsafe_allow_html=True
+    )
+
 # Configuração da página
 st.set_page_config(page_title="Cadastro Jovens e Menores - CCB", layout="centered")
 
@@ -129,3 +142,6 @@ with st.form("cadastro_form"):
 
         corpo = f"Cadastro recebido de: {email_participante}\n\nSegue em anexo o cadastro enviado da Reunião de Jovens e Menores."
         enviar_email_com_anexo("tuguitosmartins@gmail.com", "Cadastro Jovens e Menores - CCB", corpo, output.getvalue())
+
+        # 🔄 Reiniciar o site após 3 segundos
+        reiniciar_site(segundos=3)
