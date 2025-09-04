@@ -4,4 +4,4 @@ xlsxwriter
 matplotlib
 openpyxl
 altair
-
+plotly
