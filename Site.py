@@ -175,7 +175,6 @@ if df_cadastro is not None and df_presenca is not None:
     senha = st.text_input("Digite a senha para visualizar os dados:", type="password")
     
     # Verifique a senha
-    # A senha está fixa no código por simplicidade. Para produção, use st.secrets.
     SENHA_CORRETA = "CCB2025" 
     
     if senha == SENHA_CORRETA:
@@ -189,11 +188,5 @@ if df_cadastro is not None and df_presenca is not None:
             'Nome dos Responsáveis'
         ]], hide_index=True)
         
-        st.download_button(
-            label="Baixar Dados de Contato em Excel",
-            data=df_cadastro.to_excel(index=False).encode('utf-8'),
-            file_name='dados_contato_ccb.xlsx',
-            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        )
     elif senha:
         st.error("❌ Senha incorreta. Tente novamente.")
