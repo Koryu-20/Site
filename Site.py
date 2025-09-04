@@ -1,57 +1,57 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 import time
 
-# Links convertidos para CSV (coloque o format=csv no final)
-url_1 = "https://docs.google.com/spreadsheets/d/1IZIvIwvy2r-k2Tys19Fb-iZQ0LM1DP0C/export?format=csv"
-url_2 = "https://docs.google.com/spreadsheets/d/1CAV6BkA6sZy51nPE8fuwoslgC0Mxa5kO/export?format=csv"
+# Título do aplicativo
+st.set_page_config(page_title="Dashboard da Paróquia", layout="wide")
+st.title("Dashboard de Informações da Paróquia")
+st.markdown("---")
 
-st.set_page_config(page_title="📊 Informações dos Irmãos", layout="wide")
+# Função para carregar e processar os dados
+# ATENÇÃO: A lógica para ler o Google Sheets (usando a API)
+# precisaria ser inserida aqui. Este exemplo usa um DataFrame de demonstração.
+def get_data():
+    # Simulando os dados do Google Sheets
+    # Substitua esta parte pelo código real da API para buscar seus dados
+    data = {
+        'Domingo': ['01-09', '08-09', '15-09', '22-09', '29-09'],
+        'Irmãozinhos': [15, 18, 22, 25, 20],
+        'Recitativos_Totais': [5, 6, 8, 7, 9],
+        'Idade': ['10-15', '16-20', '21-25', '10-15', '16-20'],
+        'Quantidade': [30, 45, 20, 35, 50]
+    }
+    df = pd.DataFrame(data)
+    
+    # Criando um DataFrame para o gráfico de idade
+    df_idade = df.groupby('Idade')['Quantidade'].sum().reset_index()
+    return df, df_idade
 
-st.title("📊 Informações dos Irmãos e Irmãs")
+# Loop de atualização (simulando a atualização a cada 5 segundos)
+while True:
+    df, df_idade = get_data()
 
-# Auto refresh a cada 5 segundos
-st.experimental_autorefresh(interval=5000, key="refresh")
+    # Layout com colunas para organizar os gráficos
+    col1, col2 = st.columns(2)
 
-# Função para carregar os dados
-@st.cache_data(ttl=5)
-def load_data(url):
-    return pd.read_csv(url)
+    with col1:
+        st.header("Presença de Irmãozinhos por Domingo")
+        fig1 = px.bar(df, x='Domingo', y='Irmãozinhos', title="Número de Irmãozinhos por Domingo")
+        st.plotly_chart(fig1, use_container_width=True)
 
-try:
-    df1 = load_data(url_1)
-    df2 = load_data(url_2)
+        st.header("Recitativos Totais")
+        fig2 = px.line(df, x='Domingo', y='Recitativos_Totais', title="Número de Recitativos Totais")
+        st.plotly_chart(fig2, use_container_width=True)
 
-    st.subheader("👥 Arquivo 1 - Presença")
-    st.dataframe(df1.head())
+    with col2:
+        st.header("Jovens e Irmãozinhos por Faixa Etária")
+        fig3 = px.pie(df_idade, values='Quantidade', names='Idade', title="Distribuição por Faixa Etária")
+        st.plotly_chart(fig3, use_container_width=True)
 
-    st.subheader("📖 Arquivo 2 - Recitativos")
-    st.dataframe(df2.head())
+    # Mensagem de rodapé com a última atualização
+    st.markdown(f"Última atualização: {time.strftime('%H:%M:%S', time.localtime())}")
+    st.markdown("---")
 
-    # =============================
-    # Exemplos de gráficos
-    # =============================
-
-    # Quantos irmãozinhos por domingo (supondo colunas: "Data" e "Quantidade")
-    if "Data" in df1.columns and "Quantidade" in df1.columns:
-        st.bar_chart(df1.set_index("Data")["Quantidade"])
-
-    # Quantos recitativos no total (supondo coluna "Recitativo")
-    if "Recitativo" in df2.columns:
-        total_recitativos = df2["Recitativo"].count()
-        st.metric("Total de Recitativos", total_recitativos)
-
-    # Quantos irmãozinhos e jovens por idade (supondo colunas "Idade" e "Nome")
-    if "Idade" in df1.columns:
-        idade_count = df1["Idade"].value_counts()
-        st.bar_chart(idade_count)
-
-    # =============================
-    # Informações extras
-    # =============================
-    st.subheader("📞 Informações de Contato")
-    if "Nome" in df1.columns and "Telefone" in df1.columns and "Endereço" in df1.columns:
-        st.dataframe(df1[["Nome", "Telefone", "Endereço"]])
-
-except Exception as e:
-    st.error(f"Erro ao carregar dados: {e}")
+    # Espera 5 segundos antes de recarregar
+    time.sleep(5)
+    st.experimental_rerun()
